@@ -1,0 +1,23 @@
+# Objects
+obj/
+*.o
+
+# Backup files
+bak/
+
+# VIM swap files
+*.swp
+
+# directories
+configs/
+datasets/
+
+# vscode
+.vscode/
+
+# binary
+nebula
+
+# Libraries
+*.so
+*.a
