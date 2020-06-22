@@ -14,10 +14,6 @@ public:
     network_t();
     virtual ~network_t() {}
 
-    // Initialize network.
-    void init(const std::string m_network_config,
-              const std::string m_data_config, 
-			  const std::string m_input_weight);
     // Run network.
     virtual void run() = 0;
     // Print reulsts.
@@ -52,13 +48,11 @@ protected:
     // Forward propagation
     void forward();
     // Initialize network.
-    virtual void init_network(const std::string m_network_config) = 0;
-    // Initialize input data.
-    virtual void init_data(const std::string m_data_config) = 0;
-    // Load batch data.
-    virtual void load_data(const unsigned m_batch_index) = 0;
+    virtual void init(const std::string m_network_config) = 0;
     // Initialize weight.
     void init_weight(const std::string m_input_weight);
+    // Load batch data.
+    virtual void load_data(const unsigned m_batch_index) = 0;
 };
 
 } // namespace nebula

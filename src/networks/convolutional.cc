@@ -8,7 +8,6 @@
 #include <opencv2/opencv.hpp>
 
 #include "convolutional.h"
-#include "config.h"
 #include "def.h"
 #include "layer.h"
 
@@ -16,6 +15,12 @@ namespace nebula {
 
 using namespace std;
 using namespace cv;
+
+convolutional_t::convolutional_t(const std::string m_network_config) {
+    std::cout << "Initializing network ..." << std::endl;
+    // Initialize network.
+    init(m_network_config);
+}
 
 convolutional_t::~convolutional_t() {
     for(unsigned i = 0; i < layers.size(); i++) { delete layers[i]; }
@@ -25,15 +30,16 @@ convolutional_t::~convolutional_t() {
 }
 
 // Initialize network.
-void convolutional_t::init_network(std::string m_network_config) {
+void convolutional_t::init(std::string m_network_config) {
     // Parse the configuration file.
     config_t config;
     config.parse(m_network_config);
 
     // Number of layers is equivalent to the size of sections.
-    // -1 counts for generic network setting section.
-    num_layers = config.sections.size() - 1;
+    // -2 counts for generic network & dataset setting section.
+    num_layers = config.sections.size() - 2;
     layers.reserve(num_layers);
+	string input_weight;
 
     for(size_t i = 0; i < config.sections.size(); i++) {
         section_config_t section_config = config.sections[i];
@@ -45,7 +51,11 @@ void convolutional_t::init_network(std::string m_network_config) {
             section_config.get_setting("channels", &input_channel);
             section_config.get_setting("batch", &batch_size);
             input_size = input_height * input_width * input_channel;
+            section_config.get_setting("weight", &input_weight);
         }
+        else if(section_config.name == "dataset") {
+			init_data(section_config);
+		}
         // Layer configuration
         else {
             layer_t *layer = NULL;
@@ -75,25 +85,16 @@ void convolutional_t::init_network(std::string m_network_config) {
             layer->init(section_config);
             layers.push_back(layer); 
         }
+		init_weight(input_weight);
     }
 }
 
-void convolutional_t::init_data(const string m_data_config) {
-    // Parse input data config.
-    config_t config;
-    config.parse(m_data_config);
-    section_config_t section_config = config.sections[0];
-
-    if((config.sections.size() != 1) || (config.sections[0].name != "data")) {
-        cerr << "Error: input config format error in " << m_data_config << endl;
-        exit(1);
-    }
-
+void convolutional_t::init_data(section_config_t &m_section_config) {
     // Input configuration
     string input_list, label_list;
-    section_config.get_setting("test", &input_list);
-    section_config.get_setting("labels", &label_list);
-    section_config.get_setting("top", &top_k);
+    m_section_config.get_setting("inputs", &input_list);
+    m_section_config.get_setting("labels", &label_list);
+    m_section_config.get_setting("top_k", &top_k);
    
     // Read input list.
     fstream input_list_file;
@@ -254,8 +255,8 @@ void convolutional_t::print_results() {
 
 	// Print results.
 	cout << "Iteration #" << iteration
-		 << " (data #" << ((iteration+1) * batch_size) << "):" << endl;
-	cout << "  - accuracy: " << std::fixed << std::setprecision(6)
+		 << " (data #" << ((iteration+1) * batch_size) << ")" 
+		 << "  Accuracy: " << std::fixed << std::setprecision(6)
 		 << (100.0 * matches/((iteration+1) * batch_size)) << "%" << endl;
 }
 
