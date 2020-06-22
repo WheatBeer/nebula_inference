@@ -17,6 +17,8 @@ public:
 
     // Run network.
     void run();
+    // Load batch data.
+    void load_data(const unsigned m_batch_index);
     // Print reulsts.
     void print_results();
 
@@ -25,8 +27,6 @@ private:
     void init(const std::string m_network_config);
     // Initialize input data.
     void init_data(section_config_t &m_section_config);
-    // Load batch data.
-    void load_data(const unsigned m_batch_index);
 };
 
 } //namespace nebula

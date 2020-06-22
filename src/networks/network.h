@@ -16,6 +16,8 @@ public:
 
     // Run network.
     virtual void run() = 0;
+    // Load batch data.
+    virtual void load_data(const unsigned m_batch_index) = 0;
     // Print reulsts.
     virtual void print_results() = 0;
 
@@ -51,8 +53,6 @@ protected:
     virtual void init(const std::string m_network_config) = 0;
     // Initialize weight.
     void init_weight(const std::string m_input_weight);
-    // Load batch data.
-    virtual void load_data(const unsigned m_batch_index) = 0;
 };
 
 } // namespace nebula
