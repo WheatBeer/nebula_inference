@@ -10,6 +10,8 @@
 
 namespace nebula {
 
+class section_config_t;
+
 class layer_t {
 public:
     layer_t(network_t *m_network, layer_t *m_prev_layer,
