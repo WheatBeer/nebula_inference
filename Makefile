@@ -7,11 +7,13 @@ SUBDIRS=$(dir $(wildcard $(SRCDIR)/*/.))
 # Flags
 CXX=g++
 SUBFLAGS=$(addprefix -I, $(patsubst %/, %, $(SUBDIRS)))
-CXXFLAGS=-g -Wall -O3 -std=c++11 $(SUBFLAGS)
+CXXFLAGS=-g -Wall -O3 -fPIC -std=c++11 $(SUBFLAGS)
 LDFLAGS=
 LIBFLAGS=-pthread `pkg-config --libs opencv`
 
 # Sources(/src) 
+MAINSRC=$(SRCDIR)/main.cc
+MAINOBJ=$(OBJDIR)/main.o
 SRCS=$(wildcard $(SRCDIR)/*.cc)
 HDRS=$(wildcard $(SRCDIR)/*.h) 
 OBJS=$(SRCS:$(SRCDIR)/%.cc=$(OBJDIR)/%.o) 
@@ -21,25 +23,29 @@ SUBHDRS=$(wildcard $(SRCDIR)/*/*.h)
 SUBOBJS=$(addprefix $(OBJDIR)/, $(notdir $(patsubst %.cc, %.o, $(SUBSRCS))))
 # Executable
 EXE=nebula
+# Library
+LIB=libnebula.so
 
 # Targets
-.PHONY: default directories
-default: directories $(EXE)
+.PHONY: default 
+default: $(LIB) $(EXE)
 
-$(EXE): $(SUBHDRS) $(HDRS) $(SUBOBJS) $(OBJS) 
+$(EXE): $(SUBOBJS) $(OBJS)
 	@echo "# Makefile Target: $@" 
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^ $(LIBFLAGS) 
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cc 
+$(LIB): $(SUBOBJS) $(filter-out $(MAINOBJ), $(OBJS))
+	@echo "# Makefile Target: $@" 
+	$(CXX) -g -shared -Wl,-soname,$@ $(SUBFLAGS) -o $@ $^
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cc $(HDRS)
 	@echo "# Makefile Target: $@" 
 	$(CXX) $(CXXFLAGS) -o $@ -c $< 
 
-$(OBJDIR)/%.o: $(SRCDIR)/*/%.cc 
+$(OBJDIR)/%.o: $(SRCDIR)/*/%.cc $(SUBHDRS)
+	@mkdir -pv $(OBJDIR)
 	@echo "# Makefile Target: $@" 
 	$(CXX) $(CXXFLAGS) -o $@ -c $< 
-
-directories:
-	@mkdir -p $(OBJDIR)
 
 .PHONY: clean
 clean:
