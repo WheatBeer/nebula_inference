@@ -10,6 +10,7 @@ bak/
 
 # weights
 *.wgh
+!lenet.wgh
 
 # input list
 test.lst
@@ -23,3 +24,6 @@ nebula
 # Libraries
 *.so
 *.a
+
+#symbolic link
+configs/configs
