@@ -18,11 +18,6 @@ public:
     void init_weight();
     // Forward propagation
     void forward();
-    void forward(float *m_input_data);
-    // Forward batch normalization.
-    void forward_batchnorm();
-    // Move to nex time step.
-    void increment(int step);
 
     float *bias;                    // Bias.
     float *bias_update;             // Bias update.
@@ -30,21 +25,6 @@ public:
     float *weight;                  // Weight 
     float *weight_update;           // Weight update
     unsigned weight_size;           // Weight size
-
-    bool batch_normalize;           // Use batch normalize or not.
-    float *scale;                   // scale.
-    float *scale_update;
-
-    float *normalize_mean;
-    float *rolling_mean;            // Renaming
-    float *mean_delta;
-
-    float *normalize_variance;
-    float *rolling_variance;        // Renaming
-    float *variance_delta;
-
-    float *x;                       // Renaming
-    float *normalize_x;             // Renaming
 };
 
 } // namespace nebula

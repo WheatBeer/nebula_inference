@@ -12,24 +12,14 @@ class layer_t;
 class network_t {
 public:
     network_t();
-    virtual ~network_t(){}
+    virtual ~network_t() {}
 
-    // Forward propagation
-    void forward();
     // Initialize network.
     void init(const std::string m_network_config,
               const std::string m_data_config, 
 			  const std::string m_input_weight);
     // Run network.
     virtual void run() = 0;
-    // Initialize network.
-    virtual void init_network(const std::string m_network_config) = 0;
-    // Initialize input data.
-    virtual void init_data(const std::string m_data_config) = 0;
-    // Load batch data.
-    virtual void load_data(const unsigned m_batch_index) = 0;
-    // Initialize weight.
-    void init_weight(const std::string m_input_weight);
     // Print reulsts.
     virtual void print_results() = 0;
 
@@ -43,7 +33,6 @@ public:
 
     unsigned num_layers;                    // Number of layers
     unsigned num_classes;                   // Number of output classes
-    unsigned num_iterations;                // Number of iterations to run
     unsigned iteration;                     // Number of processed batches
     unsigned epoch_length;                  // Number of iterations in an epoch
     unsigned top_k;                         // Top-k indices for inference
@@ -58,6 +47,18 @@ public:
     layer_t *input_layer;                   // Input layer
     layer_t *output_layer;                  // Output layer
     std::vector<layer_t*> layers;           // Network layers
+
+protected:
+    // Forward propagation
+    void forward();
+    // Initialize network.
+    virtual void init_network(const std::string m_network_config) = 0;
+    // Initialize input data.
+    virtual void init_data(const std::string m_data_config) = 0;
+    // Load batch data.
+    virtual void load_data(const unsigned m_batch_index) = 0;
+    // Initialize weight.
+    void init_weight(const std::string m_input_weight);
 };
 
 } // namespace nebula

@@ -44,8 +44,6 @@ void convolutional_t::init_network(std::string m_network_config) {
             section_config.get_setting("width", &input_width);
             section_config.get_setting("channels", &input_channel);
             section_config.get_setting("batch", &batch_size);
-            // Total number of iterations will be later updated in init_data()
-            section_config.get_setting("num_iterations", &num_iterations);
             input_size = input_height * input_width * input_channel;
         }
         // Layer configuration
@@ -65,8 +63,7 @@ void convolutional_t::init_network(std::string m_network_config) {
             }
             else if(section_config.name == "softmax") {
                 layer = new softmax_layer_t(this, layers.size()?layers[layers.size()-1]:NULL, layer_type_t::SOFTMAX_LAYER);
-                // Softmax is output layer.
-                output_layer = layer;
+                output_layer = layer; // Softmax is output layer.
             }
             else {
                 cerr << "Error: unknown layer type " << section_config.name << endl;
@@ -109,7 +106,7 @@ void convolutional_t::init_data(const string m_data_config) {
     while(getline(input_list_file, input)) { inputs.push_back(input); }
     input_list_file.close();
 
-    // Update epoch length and num_iterations
+    // Update epoch length 
     epoch_length = inputs.size() / batch_size;
 
     // Read label list.

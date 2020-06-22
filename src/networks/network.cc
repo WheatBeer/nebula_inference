@@ -8,7 +8,7 @@ network_t::network_t()
     input_height(1), input_width(1),
     input_channel(1), input_size(0),
     num_layers(0), num_classes(0),
-    num_iterations(0), iteration(0), top_k(1),
+    iteration(0), top_k(1),
     input_data(NULL), input_label(NULL),
     reference_label(NULL), input_layer(NULL),
     output_layer(NULL) {}

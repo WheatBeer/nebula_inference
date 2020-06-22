@@ -11,6 +11,7 @@ int main(int argc, char **argv) {
         cerr << "Usage: " << argv[0] << " [npusim_config]" << endl;
         exit(1);
     }
+
     /* Initialize the global neural network data -> must be done before npu_kernel::init() */ 
     string network_config = "./configs/alexnet.cfg";
 	string data_config = "./datasets/imagenet/data.cfg";
