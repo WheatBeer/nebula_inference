@@ -12,11 +12,12 @@ LDFLAGS=
 LIBFLAGS=-pthread `pkg-config --libs opencv`
 
 # Sources(/src) 
-MAINSRC=$(SRCDIR)/main.cc
-MAINOBJ=$(OBJDIR)/main.o
 SRCS=$(wildcard $(SRCDIR)/*.cc)
 HDRS=$(wildcard $(SRCDIR)/*.h) 
 OBJS=$(SRCS:$(SRCDIR)/%.cc=$(OBJDIR)/%.o) 
+EXESRCS=$(SRCDIR)/main.cc
+EXEHDRS=
+EXEOBJS=$(EXESRCS:$(SRCDIR)/%.cc=$(OBJDIR)/%.o)
 # Sources(/src/*) 
 SUBSRCS=$(wildcard $(SRCDIR)/*/*.cc)
 SUBHDRS=$(wildcard $(SRCDIR)/*/*.h)
@@ -34,7 +35,7 @@ $(EXE): $(SUBOBJS) $(OBJS)
 	@echo "# Makefile Target: $@" 
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^ $(LIBFLAGS) 
 
-$(LIB): $(SUBOBJS) $(filter-out $(MAINOBJ), $(OBJS))
+$(LIB): $(SUBOBJS) $(filter-out $(EXEOBJS), $(OBJS))
 	@echo "# Makefile Target: $@" 
 	$(CXX) -g -shared -Wl,-soname,$@ $(SUBFLAGS) -o $@ $^
 
