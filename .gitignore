@@ -27,3 +27,5 @@ nebula
 
 #symbolic link
 configs/configs
+weights/weights
+datasets/datasets
