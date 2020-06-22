@@ -47,6 +47,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/*/%.cc $(SUBHDRS)
 	@mkdir -pv $(OBJDIR)
 	@echo "# Makefile Target: $@" 
 	$(CXX) $(CXXFLAGS) -o $@ -c $< 
+	
+.PHONY: datasets
+datasets:
+	@./datasets/mklst.sh
 
 .PHONY: clean
 clean:
