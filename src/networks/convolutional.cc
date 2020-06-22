@@ -7,6 +7,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
 
+#include "config.h"
 #include "convolutional.h"
 #include "def.h"
 #include "layer.h"

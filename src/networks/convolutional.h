@@ -1,8 +1,6 @@
 #ifndef __CONVOLUTIONAL_H__
 #define __CONVOLUTIONAL_H__
 
-#include "config.h"
-
 #include "network.h"
 
 #include "convolutional_layer.h"
