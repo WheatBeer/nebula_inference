@@ -93,22 +93,22 @@ void convolutional_layer_t::forward() {
     unsigned patch_size = filter_size * filter_size * input_channel/ group;
     unsigned num_patches = output_width * output_height;
 
-	// Convolution
-	for(unsigned i = 0; i < network->batch_size; i++){
-		for(unsigned j =0 ; j < group ; j++){
-			im2col(&input_data[(i * group + j) * input_channel / group * input_height * input_width], input_channel / group,
-					input_height, input_width, filter_size, stride, padding, workspace,
-					network->num_threads);
-			gemm(0, 0,
-					num_filters / group, num_patches, patch_size,
-					1.0,
-					&weight[j * weight_size / group], patch_size,
-					workspace, num_patches, 
-					1.0,
-					&output_data[(i * group +j) * num_patches * num_filters / group], num_patches,
-					network->num_threads);
-		}
-	}
+    // Convolution
+    for(unsigned i = 0; i < network->batch_size; i++){
+        for(unsigned j =0 ; j < group ; j++){
+            im2col(&input_data[(i * group + j) * input_channel / group * input_height * input_width], input_channel / group,
+                    input_height, input_width, filter_size, stride, padding, workspace,
+                    network->num_threads);
+            gemm(0, 0,
+                num_filters / group, num_patches, patch_size,
+                1.0,
+                &weight[j * weight_size / group], patch_size,
+                workspace, num_patches, 
+                1.0,
+                &output_data[(i * group +j) * num_patches * num_filters / group], num_patches,
+                network->num_threads);
+        }
+    }
 
     forward_bias(num_threads, output_data, bias, num_filters, num_patches, network->batch_size);
 
