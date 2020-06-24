@@ -51,7 +51,7 @@ public:
     unsigned filter_size;               // Filter size
     unsigned stride;                    // Filter striding distance
 	
-	unsigned group;					    // Group Convolution
+    unsigned group;					    // Group Convolution
    
     layer_t *prev_layer;				// Pointer to previous layer
     layer_t *next_layer;				// Pointer to next layer

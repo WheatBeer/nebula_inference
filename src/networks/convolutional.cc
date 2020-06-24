@@ -40,7 +40,7 @@ void convolutional_t::init(std::string m_network_config) {
     // -2 counts for generic network & dataset setting section.
     num_layers = config.sections.size() - 2;
     layers.reserve(num_layers);
-	string input_weight;
+    string input_weight;
 
     for(size_t i = 0; i < config.sections.size(); i++) {
         section_config_t section_config = config.sections[i];
@@ -55,8 +55,8 @@ void convolutional_t::init(std::string m_network_config) {
             section_config.get_setting("weight", &input_weight);
         }
         else if(section_config.name == "dataset") {
-			init_data(section_config);
-		}
+            init_data(section_config);
+        }
         // Layer configuration
         else {
             layer_t *layer = NULL;
@@ -86,7 +86,7 @@ void convolutional_t::init(std::string m_network_config) {
             layer->init(section_config);
             layers.push_back(layer); 
         }
-		init_weight(input_weight);
+        init_weight(input_weight);
     }
 }
 
@@ -135,15 +135,15 @@ void convolutional_t::run() {
     cout << "Running network ..." << endl;
 
     // Inference 
-	unsigned batch_count = inputs.size() / batch_size - 1;
-	for(iteration = 0; iteration < batch_count; iteration++) {
-		// Loda batch data.
-		load_data(iteration);
-		// Forward propagation
-		forward();
-		// Print batch processing results.
-		print_results();
-	}
+    unsigned batch_count = inputs.size() / batch_size - 1;
+    for(iteration = 0; iteration < batch_count; iteration++) {
+        // Loda batch data.
+        load_data(iteration);
+        // Forward propagation
+        forward();
+        // Print batch processing results.
+        print_results();
+    }
     cout << endl << "Network inference is done." << endl;
 }
 
@@ -154,10 +154,10 @@ void convolutional_t::load_data(const unsigned m_batch_index) {
     vector<string> batch_inputs;
     batch_inputs.reserve(batch_size);
 
-	// Sequentially load batch data.
-	for(unsigned i = 0; i < batch_size; i++) {
-		batch_inputs.push_back(inputs[m_batch_index*batch_size + i]);
-	}
+    // Sequentially load batch data.
+    for(unsigned i = 0; i < batch_size; i++) {
+        batch_inputs.push_back(inputs[m_batch_index*batch_size + i]);
+    }
 
     // Mark matching labels in the batch.
     memset(input_label, 0, batch_size * num_classes * sizeof(float)); 
@@ -237,21 +237,21 @@ void convolutional_t::print_results() {
 	// Array indices to sort out top-k classes.
 	vector<unsigned> indices(num_classes);
 	vector<unsigned> sorted(num_classes); {
-		int x = 0;
-		iota(sorted.begin(), sorted.end(), x++);
+        int x = 0;
+        iota(sorted.begin(), sorted.end(), x++);
 	}
 
 	// Sort output neuron indices in decending order.
 	static unsigned matches = 0;
 	for(unsigned i = 0; i < batch_size; i++) {
-		indices = sorted;
-		sort(indices.begin(), indices.end(), [&](unsigned a, unsigned b) {
-			return output_layer->output_data[i*num_classes + a] >
-				   output_layer->output_data[i*num_classes + b];
-		});
-		for(unsigned k = 0; k < top_k; k++) {
-			if(indices[k] == reference_label[i]) { matches++; }
-		}
+        indices = sorted;
+        sort(indices.begin(), indices.end(), [&](unsigned a, unsigned b) {
+            return output_layer->output_data[i*num_classes + a] >
+                    output_layer->output_data[i*num_classes + b];
+        });
+        for(unsigned k = 0; k < top_k; k++) {
+            if(indices[k] == reference_label[i]) { matches++; }
+        }
 	}
 
 	// Print results.

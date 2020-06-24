@@ -21,7 +21,7 @@ layer_t::layer_t(network_t *m_network, layer_t *m_prev_layer, layer_type_t m_lay
     num_filters(1),
     filter_size(1),
     stride(1), 
-	group(1),
+    group(1),
     prev_layer(m_prev_layer),
     next_layer(NULL),
     num_threads(1),
@@ -33,7 +33,7 @@ layer_t::layer_t(network_t *m_network, layer_t *m_prev_layer, layer_type_t m_lay
 // Activation function
 void layer_t::activate() {
     switch(activation_type) {
-		case activation_type_t::ELU_ACTIVATION: { 
+        case activation_type_t::ELU_ACTIVATION: { 
             elu_activation(output_data, output_size * network->batch_size);
             break;
         }

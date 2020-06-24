@@ -12,10 +12,10 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-	nebula::network_t *network = new nebula::convolutional_t("./configs/alexnet.cfg");
+    nebula::network_t *network = new nebula::convolutional_t("./configs/alexnet.cfg");
 
-	network->run();
-	
-	delete network;
-	return 0;
+    network->run();
+
+    delete network;
+    return 0;
 }
