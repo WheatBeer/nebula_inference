@@ -40,12 +40,10 @@ $(LIB): $(SUBOBJS) $(filter-out $(EXEOBJS), $(OBJS))
 	$(CXX) -g -shared -Wl,-soname,$@ $(SUBFLAGS) -o $@ $^
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cc $(HDRS)
-	@echo "# Makefile Target: $@" 
 	$(CXX) $(CXXFLAGS) -o $@ -c $< 
 
 $(OBJDIR)/%.o: $(SRCDIR)/*/%.cc $(SUBHDRS)
 	@mkdir -pv $(OBJDIR)
-	@echo "# Makefile Target: $@" 
 	$(CXX) $(CXXFLAGS) -o $@ -c $< 
 
 .PHONY: datasets
